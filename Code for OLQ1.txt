@@ -1,0 +1,61 @@
+#Change directory from home to local directory
+cd "/c/Users/HUGO/Documents/HUGO FILE/UNIVERSITY/ACST890"
+#Logon to the ec2 linux machine
+ssh -i 44572492.pem ubuntu@ec2-52-62-31-64.ap-southeast-2.compute.amazonaws.com
+
+#---------Question 1---------
+#Q1a
+#Download the shell file from the website and rename it as "triplet-stop.sh"
+wget https://www.staff.hs-mittweida.de/~wuenschi/data/media/compbiolbook/chapter-10-shell-programming--triplet-stop.sh
+mv chapter-10-shell-programming--triplet-stop.sh triplet-stop.sh
+#Make the shell file executable
+chmod u+x triplet-stop.sh
+#Check if the file is uploaded and executable
+ls -l triplet-stop.sh
+
+#Q1b
+#This is done using nano editor
+#!/bin/bash
+# save as triplet-stop.sh
+# splits a sequence into triplets
+x=0
+while [ -n "${1:$x:3}" ]; do
+  seq=$seq${1:$x:3}" "
+  x=$(expr $x + 3)
+#Check the first condition: if there are 9 characters already
+        if [ "$x" -gt 9 ]; then
+#Check the second condition: if the chractersequence 'taa'
+                if [ ${1:$x:3} == taa ]; then
+                        break
+                fi
+        fi
+done
+#Print out the result of variable seq
+echo "$seq"
+
+#Testing the script
+./triplet-stop.sh 123taa678
+./triplet-stop.sh 123456789123taa
+./triplet-stop.sh 12345678912taa
+
+#---------Question 2---------
+#Q2a
+scp -i 44572492.pem tutes.txt ubuntu@ec2-52-62-31-64.ap-southeast-2.compute.amazonaws.com:
+chmod u+x tutes.txt
+ls -l tutes.txt
+#Question 2b
+uniq -c tutes.txt
+
+#---------Question 3---------
+#Change file.txt as the file that requires for searching patterns
+#Exercise 11.2
+egrep '^[^ ]+ [^ ]+ [^ ]+$' file.txt
+
+#Exercise 11.3
+egrep -e '\-[0-9]+' file.txt
+
+#Exercise 11.4
+egrep -e ' [+-]?[0-9]+((.)[0-9]+)?+ ' file.txt
+
+#Exercise 11.6
+egrep ' hydrogenase' file.txt
